@@ -159,7 +159,7 @@ Returns API health status.
 You can view it in your browser with an online editor:
 
 1. Open https://editor.swagger.io/
-2. Click File > Import URL, then paste: `http://localhost:8081/openapi.yaml` (adjust the port if you changed `PORT`).
+2. Click File > Import URL, then paste: `http://localhost:8000/openapi.yaml` (adjust the port if you changed `PORT`).
 
 Or use Redocly (optional):
 
