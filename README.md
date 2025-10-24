@@ -215,13 +215,13 @@ This project uses only Go standard library packages:
 
 ```bash
 # Test OpenPhish endpoint
-curl http://localhost:8080/api/v1/openphish
+curl http://localhost:8000/api/v1/openphish
 
 # Test Netcraft endpoint
-curl http://localhost:8080/api/v1/netcraft
+curl http://localhost:8000/api/v1/netcraft
 
 # Test health endpoint
-curl http://localhost:8080/health
+curl http://localhost:8000/health
 ```
 
 ## Architecture Benefits
