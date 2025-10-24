@@ -1,0 +1,163 @@
+openapi: 3.0.3
+info:
+  title: ThreatIntel API
+  version: "1.0.0"
+  description: |
+    Simple API serving threat intelligence data from OpenPhish (CSV converted to JSON) and Netcraft (JSON).
+servers:
+  - url: /
+    description: Use current host and port
+paths:
+  /api/v1/openphish:
+    get:
+      summary: Get OpenPhish feed
+      description: Returns OpenPhish feed entries parsed from CSV as JSON records.
+      tags: [ThreatIntel]
+      responses:
+        '200':
+          description: List of OpenPhish records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OpenPhishRecord'
+        '500':
+          description: Server error while reading or parsing feed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/v1/netcraft:
+    get:
+      summary: Get Netcraft feed
+      description: Returns Netcraft Belgian dataset as a JSON array of records.
+      tags: [ThreatIntel]
+      responses:
+        '200':
+          description: List of Netcraft records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NetcraftRecord'
+        '500':
+          description: Server error while reading or parsing data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /health:
+    get:
+      summary: Health check
+      tags: [Health]
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: healthy
+                  version:
+                    type: string
+                    example: 1.0.0
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+      required: [error]
+    OpenPhishRecord:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+        brand:
+          type: string
+        ip:
+          type: string
+        asn:
+          type: string
+        asn_name:
+          type: string
+        country_code:
+          type: string
+        country_name:
+          type: string
+        tld:
+          type: string
+        discover_time:
+          type: string
+        family_id:
+          type: string
+        host:
+          type: string
+        isotime:
+          type: string
+          format: date-time
+        page_language:
+          type: string
+        ssl_cert_issued_by:
+          type: string
+        ssl_cert_issued_to:
+          type: string
+        ssl_cert_serial:
+          type: string
+        is_spear:
+          type: string
+          description: Boolean-like as string in source CSV (e.g., "False")
+        sector:
+          type: string
+      required: [url]
+    NetcraftRecord:
+      type: object
+      properties:
+        id: { type: string }
+        group_id: { type: string }
+        attack_url: { type: string, format: uri }
+        reported_url: { type: string, format: uri }
+        ip: { type: string }
+        country_code: { type: string }
+        date_submitted: { type: string }
+        last_updated: { type: string }
+        region: { type: string }
+        target_brand: { type: string }
+        authgiven: { type: boolean }
+        host: { type: string }
+        registrar: { type: string }
+        customer_label: { type: string }
+        date_authed:
+          oneOf:
+            - type: string
+            - type: 'null'
+        stop_monitoring_date: { type: string }
+        domain: { type: string }
+        language: { type: string }
+        date_first_actioned: { type: string }
+        escalated: { type: boolean }
+        first_contact: { type: string }
+        first_inactive: { type: string }
+        is_redirect: { type: string }
+        attack_type: { type: string }
+        deceptive_domain_score: { type: number }
+        domain_risk_rating: { type: number }
+        final_resolved: { type: string }
+        first_resolved: { type: string }
+        hostname: { type: string }
+        evidence_url: { type: string, format: uri }
+        domain_attack: { type: string }
+        false_positive: { type: boolean }
+        hostname_attack: { type: string }
+        report_source: { type: string }
+        reporter: { type: string }
+        screenshot_url: { type: string, format: uri }
+        status: { type: string }
+      required: [id, attack_url, reported_url]
