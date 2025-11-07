@@ -6,6 +6,7 @@ RUN go build -o threatintelapi main.go
 
 # Run stage
 FROM alpine:latest
+RUN apk add tree
 WORKDIR /app
 ENV PORT=8000
 ENV TZ=Europe/Brussels
@@ -16,5 +17,6 @@ COPY ./docs ./docs
 copy ./resources/openphish ./resources/openphish
 RUN apk add --no-cache git busybox-openrc openrc
 RUN mkdir -p /var/log && printf '0 2 * * * git -C /app/resources/openphish pull --ff-only --quiet' > /etc/crontabs/root
+RUN tree ./
 EXPOSE 8000
 CMD ["/bin/sh","-c","crond -b -l 8; ./threatintelapi"]
