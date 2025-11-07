@@ -26,7 +26,9 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Clone openphish repo
-        run: git clone https://${{ secrets.OP_PAT }}@github.com/openphish/academic app/resources/openphish
+        run: | 
+            git clone https://${{ secrets.OP_PAT }}@github.com/openphish/academic app/resources/openphish
+            tree app/resources
 
       - name: Extract Docker metadata
         id: meta
