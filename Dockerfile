@@ -13,6 +13,7 @@ COPY --from=builder /app/threatintelapi ./threatintelapi
 COPY ./resources ./resources
 COPY ./openapi.yaml ./openapi.yaml
 COPY ./docs ./docs
+copy ./resources/openphish ./resources/openphish
 RUN apk add --no-cache git busybox-openrc openrc
 RUN mkdir -p /var/log && printf '0 2 * * * git -C /app/resources/openphish pull --ff-only --quiet' > /etc/crontabs/root
 EXPOSE 8000
