@@ -10,13 +10,12 @@ import (
 )
 
 func main() {
-	openPhishRepo := repository.NewOpenPhishRepository("resources/openphish/feed.csv")
+	csvPath := "resources/openphish/feed.csv"
 	netcraftRepo := repository.NewNetcraftRepository("resources/netcraft/netcraft_mock_belgian.json")
 
-	openPhishService := service.NewOpenPhishService(openPhishRepo)
 	netcraftService := service.NewNetcraftService(netcraftRepo)
 
-	openPhishController := controller.NewOpenPhishController(openPhishService)
+	openPhishController := controller.NewOpenPhishController(csvPath)
 	netcraftController := controller.NewNetcraftController(netcraftService)
 	healthController := controller.NewHealthController()
 

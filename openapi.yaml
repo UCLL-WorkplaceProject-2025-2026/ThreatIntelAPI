@@ -3,7 +3,7 @@ info:
   title: ThreatIntel API
   version: "1.0.0"
   description: |
-    Simple API serving threat intelligence data from OpenPhish (CSV converted to JSON) and Netcraft (JSON).
+    Simple API serving threat intelligence data from OpenPhish (raw CSV file) and Netcraft (JSON).
 servers:
   - url: /
     description: Use current host and port
@@ -11,19 +11,42 @@ paths:
   /api/v1/openphish:
     get:
       summary: Get OpenPhish feed
-      description: Returns OpenPhish feed entries parsed from CSV as JSON records.
+      description: |
+        Returns the raw OpenPhish feed as a CSV file download.
+        
+        The CSV file contains the following columns:
+        - url
+        - brand
+        - ip
+        - asn
+        - asn_name
+        - country_code
+        - country_name
+        - tld
+        - discover_time
+        - family_id
+        - host
+        - isotime
+        - page_language
+        - ssl_cert_issued_by
+        - ssl_cert_issued_to
+        - ssl_cert_serial
+        - is_spear
+        - sector
       tags: [ThreatIntel]
       responses:
         '200':
-          description: List of OpenPhish records
+          description: CSV file containing OpenPhish feed data
           content:
-            application/json:
+            text/csv:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/OpenPhishRecord'
+                type: string
+                format: binary
+              example: |
+                url,brand,ip,asn,asn_name,country_code,country_name,tld,discover_time,family_id,host,isotime,page_language,ssl_cert_issued_by,ssl_cert_issued_to,ssl_cert_serial,is_spear,sector
+                https://example.com/phish,ExampleBank,1.2.3.4,AS12345,Example ISP,US,United States,com,1234567890,fam123,example.com,2024-01-01T00:00:00Z,en,R3,example.com,abc123,False,Financial
         '500':
-          description: Server error while reading or parsing feed
+          description: Server error while reading feed file
           content:
             application/json:
               schema:
@@ -74,49 +97,6 @@ components:
         error:
           type: string
       required: [error]
-    OpenPhishRecord:
-      type: object
-      properties:
-        url:
-          type: string
-          format: uri
-        brand:
-          type: string
-        ip:
-          type: string
-        asn:
-          type: string
-        asn_name:
-          type: string
-        country_code:
-          type: string
-        country_name:
-          type: string
-        tld:
-          type: string
-        discover_time:
-          type: string
-        family_id:
-          type: string
-        host:
-          type: string
-        isotime:
-          type: string
-          format: date-time
-        page_language:
-          type: string
-        ssl_cert_issued_by:
-          type: string
-        ssl_cert_issued_to:
-          type: string
-        ssl_cert_serial:
-          type: string
-        is_spear:
-          type: string
-          description: Boolean-like as string in source CSV (e.g., "False")
-        sector:
-          type: string
-      required: [url]
     NetcraftRecord:
       type: object
       properties:

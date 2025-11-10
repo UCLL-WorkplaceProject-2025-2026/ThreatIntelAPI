@@ -71,31 +71,12 @@ ThreatIntelAPI/
 ```
 GET /api/v1/openphish
 ```
-Returns all OpenPhish threat intelligence records in JSON format.
+Returns the raw OpenPhish feed as a CSV file download.
 
-```go
-type OpenPhishRecord struct {
-	URL             string `json:"url"`
-	Brand           string `json:"brand"`
-	IP              string `json:"ip"`
-	ASN             string `json:"asn"`
-	ASNName         string `json:"asn_name"`
-	CountryCode     string `json:"country_code"`
-	CountryName     string `json:"country_name"`
-	TLD             string `json:"tld"`
-	DiscoverTime    string `json:"discover_time"`
-	FamilyID        string `json:"family_id"`
-	Host            string `json:"host"`
-	ISOTime         string `json:"isotime"`
-	PageLanguage    string `json:"page_language"`
-	SSLCertIssuedBy string `json:"ssl_cert_issued_by"`
-	SSLCertIssuedTo string `json:"ssl_cert_issued_to"`
-	SSLCertSerial   string `json:"ssl_cert_serial"`
-	IsSpear         string `json:"is_spear"`
-	Sector          string `json:"sector"`
-}
-
-```
+**Response:**
+- **Content-Type:** `text/csv`
+- **Format:** CSV with headers
+- **Columns:** url, brand, ip, asn, asn_name, country_code, country_name, tld, discover_time, family_id, host, isotime, page_language, ssl_cert_issued_by, ssl_cert_issued_to, ssl_cert_serial, is_spear, sector
 
 ### Get Netcraft Data
 ```
@@ -214,8 +195,11 @@ This project uses only Go standard library packages:
 ## Testing the API
 
 ```bash
-# Test OpenPhish endpoint
+# Download OpenPhish CSV feed
 curl http://localhost:8000/api/v1/openphish
+
+# Or save to file
+curl http://localhost:8000/api/v1/openphish -o openphish_feed.csv
 
 # Test Netcraft endpoint
 curl http://localhost:8000/api/v1/netcraft

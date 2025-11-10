@@ -1,19 +1,16 @@
 package controller
 
 import (
-	"encoding/json"
-	"fmt"
 	"net/http"
-	"threatintelapi/service"
 )
 
 type OpenPhishController struct {
-	service service.OpenPhishService
+	csvPath string
 }
 
-func NewOpenPhishController(service service.OpenPhishService) *OpenPhishController {
+func NewOpenPhishController(csvPath string) *OpenPhishController {
 	return &OpenPhishController{
-		service: service,
+		csvPath: csvPath,
 	}
 }
 
@@ -25,12 +22,8 @@ func (c *OpenPhishController) GetAll(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	records, err := c.service.GetAllRecords()
-	if err != nil {
-		http.Error(w, fmt.Sprintf("Error retrieving records: %v", err), http.StatusInternalServerError)
-		return
-	}
-
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(records)
+	// Serve the raw CSV file
+	w.Header().Set("Content-Type", "text/csv")
+	w.Header().Set("Content-Disposition", "attachment; filename=\"feed.csv\"")
+	http.ServeFile(w, r, c.csvPath)
 }
